@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AssetDef } from '../asset-def';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-asset-def',
@@ -17,7 +18,7 @@ export class AssetDefComponent implements OnInit {
   asset: AssetDef = new AssetDef();
   assettypes: Observable<AssetType[]>;
 
-  constructor(private formBuilder: FormBuilder, private assetService: AssetDefService, private router: Router, private toastr: ToastrService) { }
+  constructor(private service:AuthService, private formBuilder: FormBuilder, private assetService: AssetDefService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit() {
     //this.reloadData();
@@ -27,6 +28,7 @@ export class AssetDefComponent implements OnInit {
       ad_class: ['', Validators.compose([Validators.required])]
 
     });
+    this.assettypes=this.assetService.getAssetTypes();
   }
   reloadData() {
     //this.assettypes=this.assetService.getAssetTypes();
@@ -35,11 +37,27 @@ export class AssetDefComponent implements OnInit {
     this.asset.ad_name = this.assetForm.controls.ad_name.value;
     this.asset.ad_type_id = this.assetForm.controls.ad_type_id.value;
     this.asset.ad_class = this.assetForm.controls.ad_class.value;
+    
 
+    this.assetService.addAsset(this.asset).subscribe(res=>{
+      if(res==1)
+      {
+        this.toastr.success('Success :)', 'Added Successfully');
 
-    this.assetService.addAsset(this.asset).subscribe();
+      }
+      else
+      {
+        this.toastr.error("Asset already exist");
+      }
+    });
+
     this.ngOnInit();
-    this.toastr.success('Success :)', 'Added Successfully');
+    //this.toastr.success('Success :)', 'Added Successfully');
   }
+  Logout(){
+    this.service.logout();
+    this.router.navigateByUrl('login');
 
+
+  }
 }

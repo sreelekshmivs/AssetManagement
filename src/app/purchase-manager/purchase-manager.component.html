@@ -1,1 +1,106 @@
-<p>purchase-manager works!</p>
+
+<div class="panel-heading">
+    <h3 style="text-align: center;"><b>Purchase Order</b></h3>
+  </div>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a href="purchaseorder" class="nav-link active" routerLinkActive="active">Purchase Order</a>
+    </li>
+    <li class="nav-item">
+      <a href="orderhistory" class="nav-link" routerLinkActive="active">Order history</a>
+    </li>
+
+    <li class="nav-item">
+      <a href="login" class="nav-link" routerLinkActive="active" (click)="Logout()">Logout</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="card">
+  <div class="card-body">
+
+    <div class="form-group">
+      <input type="text" placeholder="Enter Assetname" [(ngModel)]="SearchString">
+      <button type="button" value="Search" (click)="searchAssetType(SearchString)" class="btn-info">Search</button>
+    </div>
+    <form [formGroup]="purchaseForm" novalidate (ngSubmit)="addOrder()">
+      <div [ngClass]="form-group">
+        <label class="col-md-4">Order Number</label>
+        <input type="text" readonly="true" class="form-control" formControlName="pd_order_no" #pd_order_no />
+      </div>
+
+      <div
+        *ngIf="purchaseForm.controls['pd_order_no'].invalid && (purchaseForm.controls['pd_order_no'].dirty || purchaseForm.controls['pd_order_no'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="purchaseForm.controls['pd_order_no'].errors.required">
+          Order Number is required.
+        </div>
+      </div>
+
+      
+ 
+      <div [ngClass]="form-group">
+        <label class="col-md-4">Asset Type</label>
+
+        <select class="form-control" id="pd_type_id" name="pd_type_id" formControlName="pd_type_id" #pd_type_id
+          (change)='onOptionsSelected(pd_type_id.value)'>
+          <option value="">Choose Asset Type</option>
+          <option *ngFor="let assettype of assettypes | async" value="{{assettype.at_id}}">{{assettype.at_name}}
+          </option>
+        </select>
+      </div>
+
+      <div
+        *ngIf="purchaseForm.controls['pd_type_id'].invalid && (purchaseForm.controls['pd_type_id'].dirty || purchaseForm.controls['pd_type_id'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="purchaseForm.controls['pd_type_id'].errors.required">
+          Asset Type is required.
+        </div>
+      </div>
+
+
+
+      <div [ngClass]="form-group">
+        <label class="col-md-4">Vendor</label>
+
+        <select class="form-control" id="pd_vendor_id" name="pd_vendor_id" formControlName="pd_vendor_id">
+          <option value="">Choose Vendor</option>
+          <option *ngFor="let vendor of vendors | async" ngValue="{{vendor.vd_id}}">{{vendor.vd_name}}
+          </option>
+        </select>
+      </div>
+
+      <div
+        *ngIf="purchaseForm.controls['pd_vendor_id'].invalid && (purchaseForm.controls['pd_vendor_id'].dirty || purchaseForm.controls['pd_vendor_id'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="purchaseForm.controls['pd_vendor_id'].errors.required">
+          Vendor is required.
+        </div>
+      </div>
+
+
+
+      
+      <div [ngClass]="form-group">
+        <label class="col-md-4">Quantity</label>
+        <input type="number" class="form-control" formControlName="pd_qty" #pd_qty />
+      </div>
+
+      <div
+        *ngIf="purchaseForm.controls['pd_qty'].invalid && (purchaseForm.controls['pd_qty'].dirty || purchaseForm.controls['pd_qty'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="purchaseForm.controls['pd_qty'].errors.required">
+          Quantity is required.
+        </div>
+      </div>
+
+      <br>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" [disabled]="purchaseForm.pristine || purchaseForm.invalid">
+          Place Order
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

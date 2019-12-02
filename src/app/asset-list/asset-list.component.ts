@@ -4,6 +4,7 @@ import { AssetDef } from '../asset-def';
 import { AssetDefService } from '../asset-def.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-asset-list',
@@ -11,11 +12,14 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./asset-list.component.scss']
 })
 export class AssetListComponent implements OnInit {
-
+  public popoverTitle: string = 'Delete';
+  public popoverMessage: string = 'Do you want to delete?';
+  public confirmClicked: boolean = false;
+  public cancelClicked: boolean = false;
   
   assets:Observable<AssetDef[]>
  
-  constructor(private assetService:AssetDefService,private router:Router,private toastr: ToastrService ) { }
+  constructor(private service:AuthService,private assetService:AssetDefService,private router:Router,private toastr: ToastrService ) { }
 
   ngOnInit() {
   this.reloadData();
@@ -28,20 +32,28 @@ deleteAsset(id:number){
     
   this.assetService.deleteAsset(id).subscribe(data=>{
     console.log(data);
-    this.toastr.error('Oh No! :)','Deleted Successfully');
+    this.toastr.success('Deleted Successfully');
     this.reloadData();
    
   })
 
 }
-search(ad_name:string)
+search(name: string)
   {
-    this.assets=this.assetService.searchAsset(ad_name);
-    if(ad_name="")
+   
+    if(name=="")
     {
       this.assets=this.assetService.getAssetList();
     }
+    else{
+      this.assets=this.assetService.searchAsset(name);
+    }
   }
+  Logout(){
+    this.service.logout();
+    this.router.navigateByUrl('login');
 
+
+  }
 
 }

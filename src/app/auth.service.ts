@@ -18,8 +18,8 @@ export class AuthService {
 
   public Login(userInfo:Login): Observable<any>{
     
-    localStorage.setItem('ACCESS_TOKEN',"access_token");
-    return this.http.get(this.baseUrl+'/Login_tbl?u_name='+userInfo.u_name+'&pwd='+userInfo.p_word);
+    //localStorage.setItem('ACCESS_TOKEN',"access_token");
+    return this.http.get(this.baseUrl+'/Login_tbl?u_name='+userInfo.u_name+'&p_word='+userInfo.p_word);
 
 
   }

@@ -1,0 +1,173 @@
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a href="create" class="nav-link " routerLinkActive="active">Asset Definition</a>
+        </li>
+        <li class="nav-item">
+            <a href="Vendor" class="nav-link" routerLinkActive="active">Vendor</a>
+        </li>
+        <li class="nav-item">
+            <a href="assetmaster/:id" class="nav-link active" routerLinkActive="active">Asset Master</a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link" routerLinkActive="active" (click)="Logout()">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a href="masterorderlist" class="nav-link " routerLinkActive="active">Order Status</a>
+        </li>
+        <li class="nav-item">
+            <a href="masterlist" class="nav-link active" routerLinkActive="active">Master List</a>
+        </li>
+    </ul>
+</nav>
+
+
+<div class="card">
+    <div class="card-body">
+      
+      <!--   <div class="form-group">
+            <input type="text" placeholder="Enter Assetname" [(ngModel)]="SearchString">
+            <button type="button" value="Search" (click)="searchAssetType(SearchString)" class="btn-info">Search</button>
+        </div> -->
+      <form [formGroup]="masterForm" novalidate (ngSubmit)="addAsset()">
+  
+          <div [ngClass]="form-group">
+              <label class="col-md-4">Asset Name</label>
+              <input type="text" class="form-control" readonly="true"
+                formControlName="am_ad_name" [(ngModel)]="master.am_ad_name"
+                #am_ad_name />
+            </div> 
+            
+            <div *ngIf="masterForm.controls['am_ad_name'].invalid && (masterForm.controls['am_ad_name'].dirty || masterForm.controls['am_ad_name'].touched)" class="alert alert-danger">
+              <div *ngIf="masterForm.controls['am_ad_name'].errors.required">
+                Asset Name is required.
+              </div>
+            </div>
+            
+        <div [ngClass]="form-group"> 
+          <div [ngClass]="form-group">
+            <label class="col-md-4">Asset Type</label>
+            <input type="text" class="form-control" readonly="true"
+              formControlName="am_atype_name" [(ngModel)]="master.am_atype_name"
+              #am_atype_name />
+          </div>         
+         
+          <div *ngIf="masterForm.controls['am_atype_name'].invalid && (masterForm.controls['am_atype_name'].dirty || masterForm.controls['am_atype_name'].touched)" class="alert alert-danger">
+            <div *ngIf="masterForm.controls['am_atype_name'].errors.required">
+              Asset Type is required.
+            </div> 
+          </div> 
+        </div>
+  
+  
+        <div [ngClass]="form-group"> 
+          <div [ngClass]="form-group">
+            <label class="col-md-4">Vendor</label>
+            <input type="text" class="form-control" readonly="true"
+              formControlName="am_make_name" [(ngModel)]="master.am_make_name"
+              #am_make_name />
+          </div>  
+         
+          <div *ngIf="masterForm.controls['am_make_name'].invalid && (masterForm.controls['am_make_name'].dirty || masterForm.controls['am_make_name'].touched)" class="alert alert-danger">
+            <div *ngIf="masterForm.controls['am_make_name'].errors.required">
+              Vendor is required.
+            </div> 
+          </div> 
+        </div>
+  
+        <div [ngClass]="form-group">
+          <label class="col-md-4">Quantity</label>
+          <input type="number" class="form-control" readonly="true"
+            formControlName="am_quantity"  [(ngModel)]="master.am_quantity"
+            #am_quantity />
+        </div> 
+        
+        <div *ngIf="masterForm.controls['am_quantity'].invalid && (masterForm.controls['am_quantity'].dirty || masterForm.controls['am_quantity'].touched)" class="alert alert-danger">
+          <div *ngIf="masterForm.controls['am_quantity'].errors.required">
+            Quantity is required.
+          </div>
+        </div>
+  
+        <div [ngClass]="form-group">
+          <label class="col-md-4">Manufacture Date</label>
+          <input type="date" class="form-control"
+            formControlName="am_myyear" 
+            #am_myyear />
+        </div> 
+        
+        <div *ngIf="masterForm.controls['am_myyear'].invalid && (masterForm.controls['am_myyear'].dirty || masterForm.controls['am_myyear'].touched)" class="alert alert-danger">
+          <div *ngIf="masterForm.controls['am_myyear'].errors.required">
+            Manufacture Date is required.
+          </div>
+        </div>
+  
+  
+        <div [ngClass]="form-group">
+          <label class="col-md-4">Model Number</label>
+          <input type="text" class="form-control"
+            formControlName="am_model"  
+            #am_model />
+        </div> 
+        
+        <div *ngIf="masterForm.controls['am_model'].invalid && (masterForm.controls['am_model'].dirty || masterForm.controls['am_model'].touched)" class="alert alert-danger">
+          <div *ngIf="masterForm.controls['am_model'].errors.required">
+            Model Number is required.
+          </div>
+        </div>
+        <br>
+        
+        <div [ngClass]="form-group">
+          
+              <label>Warranty</label>
+              <select [(value)]="selected" [(ngModel)]="master.am_warranty" name="am_warranty" formControlName="am_warranty">
+                <option>None</option>
+                <option value="Y">Yes</option>
+                <option value="N">No</option>
+        
+              </select>
+              
+           
+        
+        <div *ngIf="masterForm.controls['am_warranty'].invalid && (masterForm.controls['am_warranty'].dirty || masterForm.controls['am_warranty'].touched)" class="alert alert-danger">
+          <div *ngIf="masterForm.controls['am_warranty'].errors.required">
+            Warranty is required.
+          </div>
+        </div>   
+        </div> 
+  
+        <div [ngClass]="form-group"> 
+          <div [ngClass]="form-group">
+            <label class="col-md-4">Warranty From</label>
+            <input type="date" class="form-control"
+              formControlName="am_from" [(ngModel)]="master.am_from"
+              #am_from />
+          </div>  
+       
+        </div> 
+  
+        <div [ngClass]="form-group"> 
+          <div [ngClass]="form-group">
+            <label class="col-md-4">Warranty To</label>
+            <input type="date" class="form-control"
+              formControlName="am_to" [(ngModel)]="master.am_to"
+              #am_to />
+          </div>  
+         
+      
+        </div> 
+  
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary"
+          [disabled]="masterForm.pristine || masterForm.invalid" >
+            Add Asset
+          </button>
+      </div>
+        </form>
+    </div>
+  </div>
+  

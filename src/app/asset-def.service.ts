@@ -21,7 +21,7 @@ export class AssetDefService {
   GetAsset(id:number):Observable<any>{
     return this.http.get(this.baseUrl+'/Asset_def/'+id)
   }
-  UpdateAsset(id:number,product:AssetDef)
+  updateAsset(id:number,product:AssetDef)
   {
     return this.http.put(this.baseUrl+'/Asset_def/'+id,product)
   }
@@ -34,5 +34,11 @@ export class AssetDefService {
   }
   getAssetTypes():Observable<any>{
     return this.http.get(this.baseUrl+'/Asset_type');
+  }
+  getAsset_def(name:string):Observable<any>{
+    return this.http.get(this.baseUrl+'/Asset_def?na='+name);
+  }
+  putAsset_def(id:number,asset:AssetDef):Observable<any>{
+    return this.http.put(this.baseUrl+'/Asset_def/'+id,asset);
   }
 }

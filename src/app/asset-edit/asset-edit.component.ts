@@ -4,6 +4,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AssetDefService } from '../asset-def.service';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Observable, VirtualTimeScheduler } from 'rxjs';
+import { AssetType } from '../asset-type';
 
 @Component({
   selector: 'app-asset-edit',
@@ -12,42 +14,51 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AssetEditComponent implements OnInit {
 
-  asset: AssetDef = new AssetDef;
-  assets: AssetDef[];
-  response: any;
-  assettform: FormGroup;
-  constructor(private assetService: AssetDefService, private route: ActivatedRoute, private formBuilder: FormBuilder, private toastr: ToastrService) { }
-  id: number;
-  ngOnInit() {
-    this.id = this.route.snapshot.params["id"];
-    console.log(this.id);
-    this.assetService.GetAsset(this.id)
-      .subscribe(x => {
-        this.asset = x;
-        console.log(x)
+  asset: AssetDef;
+  assetForm: FormGroup;
+  assettypes: Observable<AssetType[]>;
+  assets:Observable<AssetDef[]>;
 
-      }, error => console.log(error));
-    this.assettform = this.formBuilder.group({
-      ad_id: null,
+  constructor(private service: AssetDefService, private route: ActivatedRoute, private formBuilder:FormBuilder, private toastr:ToastrService) { }
+  id:number;
+  pdt: any;
+  
+  ngOnInit() {
+    this.id=this.route.snapshot.params["id"];
+    this.assetForm=this.formBuilder.group({
+      ad_id: [Validators.required],
       ad_name: [Validators.compose([Validators.required])],
       ad_type_id: [Validators.compose([Validators.required])],
-      ad_class: [Validators.compose([Validators.required])],
+      ad_class: [Validators.compose([Validators.required])]
+    }); 
+  //  this.assets=this.service.getAsset(this.id);
+   // this.asset=this.assets[0];
+   // console.log(this.asset.ad_name);
+    this.service.GetAsset(this.id).subscribe(x=>{
+      this.asset=x;
+    }); 
+    this.assettypes=this.service.getAssetTypes();
+    
 
-
-
-    });
+    
   }
-  get formControls() {
-    return this.assettform.controls;
-  }
-  UpdateAsset() {
-    this.asset.ad_id = this.assettform.controls.ad_id.value;
-    this.asset.ad_name = this.assettform.controls.ad_name.value;
-    this.asset.ad_type_id = this.assettform.controls.ad_type_id.value;
-    this.asset.ad_class = this.assettform.controls.ad_class.value;
 
-    this.assetService.UpdateAsset(this.id, this.asset).subscribe(res => {
-      this.toastr.warning('Update Successfull', 'Yipee!')
-    })
+  get formControls(){
+    return this.assetForm.controls;
+  
   }
+
+  updateAsset()
+    {
+  
+      this.asset.ad_id=this.id;
+      this.asset.ad_name=this.assetForm.controls.ad_name.value;
+      this.asset.ad_type_id=this.assetForm.controls.ad_type_id.value;
+      this.asset.ad_class=this.assetForm.controls.ad_class.value;
+      this.service.putAsset_def(this.id,this.asset).subscribe(res=>{
+        this.toastr.success('Asset Updated');
+      });
+
+    }
+
 }

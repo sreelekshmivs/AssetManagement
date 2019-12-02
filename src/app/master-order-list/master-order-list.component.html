@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a href="create" class="nav-link " routerLinkActive="active">Asset Definition</a>
+        </li>
+        <li class="nav-item">
+            <a href="Vendor" class="nav-link" routerLinkActive="active">Vendor</a>
+        </li>
+        <li class="nav-item">
+            <a href="assetmaster/:id" class="nav-link active" routerLinkActive="active">Asset Master</a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link" routerLinkActive="active" (click)="Logout()">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a href="masterorderlist" class="nav-link active" routerLinkActive="active">Order Status</a>
+        </li>
+        <li class="nav-item">
+            <a href="masterlist" class="nav-link " routerLinkActive="active">Master List</a>
+        </li>
+    </ul>
+</nav>
+
+
+<div class="panel-body">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Order Number</th>
+                <th>AssetName</th>
+                <th>Asset Type</th>
+                <th>Vendor</th>
+                <th>Quantity</th>
+                <th>Purchase Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let purchase of purchases | async | paginate: {itemsPerPage:4,currentPage:p}; let i=index ">
+                <td>{{purchase.pd_order_no}}</td>
+                <td>{{purchase.pd_ad}}</td>
+                <td>{{purchase.pd_type}}</td>
+                <td>{{purchase.pd_vendor}}</td>
+                <td>{{purchase.pd_qty}}</td>
+                <td>{{purchase.pd_ddateStr}}</td>
+                <td><button [routerLink]="['/assetmaster',purchase.pd_order_no]" class="btn btn-info"
+                        style="margin-left: 10px" routerLinkActive="active">Add Asset</button>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
